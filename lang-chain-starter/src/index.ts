@@ -1,26 +1,26 @@
-import * as dotenv from "dotenv";
-import { OpenAI } from "langchain";
+import { ChatDeepSeek } from "@langchain/deepseek";
+import { HumanMessage } from "@langchain/core/messages";
+import { AIMessage } from "@langchain/core/messages";
+import { SystemMessage } from "@langchain/core/messages";
+import { ToolMessage } from "@langchain/core/messages";
 
-dotenv.config();
 
-// 使用 DeepSeek 模型
-const model = new OpenAI({
-  // 按需替换为你要使用的 DeepSeek 具体模型名
-  modelName: "deepseek-chat",
-  // DeepSeek 的 API Key，从 .env 中读取
-  openAIApiKey: process.env.DEEPSEEK_API_KEY,
-  // DeepSeek OpenAI 兼容接口地址（通过 configuration 传入）
-  configuration: {
-    baseURL: process.env.DEEPSEEK_BASE_URL,
-  },
-} as any);
+import dotenv from "dotenv";
+// 0 加载 .env 文件中的环境变量
+dotenv.config(); 
 
-try {
-  const res = await model.call("你好，请问你是谁？");
-  console.log(res);
-} catch (err: any) {
-  // 打印更详细的错误信息，方便排查 403 的具体原因
-  console.error("调用 DeepSeek 失败：", err?.response?.status, err?.response?.statusText);
-  console.error("响应体：", err?.response?.data);
-  throw err;
-}
+// 1 实例化 DeepSeek 聊天模型
+const model = new ChatDeepSeek({
+  model: "deepseek-chat", // 普通对话，非深度思考
+  // model: "deepseek-reasoner",  // 使用推理模型，开启深度思考，会额外返回"reasoning_content"字段
+  temperature: 1.3,       // 控制输出的随机性：根据不同场景进行配置
+  // apiKey 默认从环境变量 DEEPSEEK_API_KEY 读取
+  // baseURL 默认deepSeek的官网
+  maxTokens: 1000, // 大致一个汉字占用一个token，生产内容、传入提示词也越长
+});
+
+// 2 调用模型
+const response = await model.invoke([
+  new HumanMessage("什么是深度思考?")
+]);
+console.log(response);
