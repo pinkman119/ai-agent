@@ -10,7 +10,8 @@
   "scripts": {
     "tsup": "tsup",
     "build": "tsup",
-    "start": "tsx -r dotenv/config src/stream-output.ts",
+    "start": "tsx -r dotenv/config src/index.ts",
+    "dev": "tsx -r dotenv/config src/index.ts",
     "lint": "eslint src",
     "lint:fix": "npm run lint --fix",
     "format": "prettier --write \"**/*.ts\"",
@@ -29,9 +30,11 @@
   "dependencies": {
     "@langchain/core": "^1.1.32",
     "@langchain/deepseek": "^1.0.17",
+    "@langchain/langgraph": "^1.2.2",
     "dotenv": "^16.0.3",
     "langchain": "^0.0.39",
     "langchain.js": "^0.0.4",
+    "langsmith": "^0.5.10",
     "tsup": "^6.7.0"
   },
   "devDependencies": {
