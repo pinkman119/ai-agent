@@ -9,7 +9,7 @@ import { createDeepSeekLLM } from "../config/deepSeek.js";
  */
 export async function recommendNode(
   state: GraphState
-): Promise<Partial<GraphState>> {
+): Promise<{ messages: GraphState["messages"]; recommendations: GraphState["recommendations"] }> {
   // 获取电影推荐列表
   const movies = getMovieRecommendations();
   
@@ -23,12 +23,7 @@ export async function recommendNode(
         `${index + 1}. 《${movie.title}》(${movie.year}) - ${movie.genre} - 评分: ${movie.rating}/10\n   简介: ${movie.description}`
     )
     .join("\n\n");
-
-  const prompt = `你是一个专业的电影推荐助手。以下是为你推荐的10部经典电影：
-
-${movieList}
-
-请用友好、专业的语气向用户介绍这些电影推荐，突出每部电影的亮点和值得观看的理由。`;
+  const prompt = `你是一个专业的电影推荐助手。请推荐中文电影，突出每部电影的亮点和值得观看的理由。`;
 
   // 调用 LLM 生成推荐文本
   const response = await llm.invoke([new HumanMessage(prompt)]);
