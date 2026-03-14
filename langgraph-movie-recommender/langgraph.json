@@ -1,0 +1,6 @@
+{
+  "graphs": {
+    "movieAgent": "./src/agent.ts:agent"
+  },
+  "env": ".env"
+}
